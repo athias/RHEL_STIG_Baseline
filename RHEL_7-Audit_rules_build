@@ -33,8 +33,11 @@ source /Enclave_variables.sh
 set_variables
 root_uid_check
 
+# Enclave_variables has a few variables in it that I will have to list later.
+# 
+
 LOG_FILE="${LOG_DIR}/Audit_build.log"		# Log file creation
-TEMPLATE_DIR="/Sysadmin/UNIX/templates/RHEL_7/audit_rules"
+TEMPLATE_DIR="/audit.rules"
 
 # Checks if log file exists and adds timestamp to prevent overlapping
 if [[ -f ${LOG_FILE} ]];then
