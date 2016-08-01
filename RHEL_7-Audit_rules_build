@@ -1,0 +1,119 @@
+#!/bin/bash
+################################################################################
+#
+# ./RHEL_7-CONFIG-Audit_rules_build.sh
+#	
+#	This script is designed to copy the audit.rules template based on the
+#	correct architecture, and build the system specific audit configurations
+#
+#	NOTE:	This script must be run as root.
+#	NOTE:	RHEL 7 audit rules are modified by adding a file in the
+#		/etc/audit/rules.d/ directory
+#
+################################################################################
+#
+# Created by:		Matthew R. Sawyer
+# Last modified by:	Matthew R. Sawyer
+#
+# Modification History:
+#
+# 20160129 sawyerm	Re-creation of script based on previous work
+#			This version is designed to work with the new Sysadmin
+#			share /Sysadmin/UNIX/- and updated templates based on
+#			STIG updates and clarification
+# 20160303 sawyerm	Modified RHEL6 version to be compatible with RHEL7
+# 20160318 bramr	Changed RHEL 6 references to RHEL 7
+# 20160321 sawyerm	Updated and Verified RHEL 7 changes.
+#
+################################################################################
+# Sourcing and Header notes
+################################################################################
+
+source /Enclave_variables.sh
+set_variables
+root_uid_check
+
+LOG_FILE="${LOG_DIR}/Audit_build.log"		# Log file creation
+TEMPLATE_DIR="/Sysadmin/UNIX/templates/RHEL_7/audit_rules"
+
+# Checks if log file exists and adds timestamp to prevent overlapping
+if [[ -f ${LOG_FILE} ]];then
+	printf "\e[0;31mWARNING:\e[0m It appears that this script has already been ran on this server.\n"
+	printf "\e[0;32mNOTE:\e[0m Repeating this has shown to have low impact to the system, but the process can take some time.\n"
+	printf "Do you want to run it again? [y/n]\n"
+	read yn
+	if [[ $yn =~ [Yy][Ee][Ss]|[Yy] ]];then
+		:
+	else
+		printf "Aborting!\n\n"
+		end_script
+	fi
+fi
+
+# Verification this is being run on a RHEL 7 box
+if [[ -z `uname -r | egrep '.el7.'` ]];then
+	printf "\e[0;31mERROR:\e[0mThis is not a RHEL 7 server - quitting\n"
+	end_script
+fi
+
+################################################################################
+# Header build, backup config, and replace with template
+################################################################################
+
+printf "Audit Build Script\n" | tee ${LOG_FILE}
+printf "Current Date:\t${CUR_DATE}\n" | tee -a ${LOG_FILE}
+printf "Current Time:\t${CUR_TIME}\n" | tee -a ${LOG_FILE}
+printf "#############\t########\n\n"| tee -a ${LOG_FILE}
+
+printf "Creating a backup of /etc/audit/rules.d/audit.rules\n" | tee -a ${LOG_FILE}
+cp /etc/audit/rules.d/audit.rules /etc/audit/rules.d/audit.rules.${CUR_DATE}
+printf "\tDone!\n" | tee -a ${LOG_FILE}
+
+printf "Copying the audit.rules template to /etc/audit/rules.d/audit.rules\n" | tee -a ${LOG_FILE}
+
+if [[ -n `uname -r | grep '.x86_64$'` ]];then
+	cp ${TEMPLATE_DIR}/audit_rules_arch_64 /etc/audit/rules.d/audit.rules
+else
+	printf "\e[0;31mERROR:Something is wrong with the architecture.\."
+	end_script
+fi	
+
+printf "\tDone!\n" | tee -a ${LOG_FILE}
+
+################################################################################
+# Server Specific Configurations (RHEL-06-000198)  Different from RHEL 6
+################################################################################
+
+printf "Adding server specific configurations to /etc/audit/rules.d/audit.rules\n" | tee -a ${LOG_FILE}
+
+pie="`df -l | egrep -v 'Filesystem' | grep '%' | sed 's/.*%\ //'`"
+pi="`for i in $pie;do find $i -xdev -type f -perm /6000 2>/dev/null;done`"
+
+for i in $pi;do
+	echo -e "-a always,exit -F path=$i -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> /etc/audit/rules.d/audit.rules
+done
+
+printf "\n#\n# Make the configuration immutable - reboot is required to change audit rules\n" >> /etc/audit/rules.d/audit.rules
+printf "#-e 2\n" >> /etc/audit/rules.d/audit.rules
+
+printf "\n################################################################################\n"  >> /etc/audit/rules.d/audit.rules
+printf "# End of File\n"  >> /etc/audit/rules.d/audit.rules
+printf "################################################################################\n"  >> /etc/audit/rules.d/audit.rules
+
+printf "\tDone!\n" | tee -a ${LOG_FILE}
+
+printf "Restarting the auditing daemon\n" | tee -a ${LOG_FILE}
+
+service auditd stop | tee -a ${LOG_FILE}
+sleep 2
+systemctl start auditd | tee -a ${LOG_FILE}
+sleep 2
+
+printf "\nAudit Build Script Completed!\n\n" | tee -a ${LOG_FILE}
+printf "Log File is located at:\t${LOG_FILE}\n\n" | tee -a ${LOG_FILE}
+
+end_script
+
+################################################################################
+# End of Script 
+################################################################################
