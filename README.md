@@ -1,11 +1,11 @@
-# RHEL_STIG_Lockdown
+# RHEL_STIG_Baseline
 
 Welcome to the Red Hat Enterprise Linux (RHEL) Secure Technical Implementation
-Guide (STIG) Lockdown repository.  This is a series of scripts designed to
+Guide (STIG) Baseline repository.  This is a series of scripts designed to
 augment a properly designed build document.  They perform a combintion of system
 lockdowns according to the STIG and additional security and optimization best
-practices.  It is assumed that some STIG settings are performed during the
-initial server installation.
+practices.  Due to the nature of STIG items, some are intentionally left out
+to be configured based on local policies.
 
 ## RHEL Build Document
 
