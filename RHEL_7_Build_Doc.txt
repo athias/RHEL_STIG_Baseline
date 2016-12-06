@@ -1,0 +1,504 @@
+
+Conversation opened. 1 read message.
+
+Skip to content
+Using Gmail with screen readers
+Move to Inbox
+ 
+More 
+11 of 14
+ 
+build doc
+Inbox
+	x
+Sawyer, Matthew Ryan CTR STRATCOM J64 (US) <matthew.r.sawyer4.ctr@mail.mil>
+	
+AttachmentsAug 22
+	
+to me
+Matthew R. Sawyer
+RHCSA 7
+ITCC J646 Unix Engineering
+Comm. (402) 294-9531
+2 Attachments
+	
+Click here to Reply or Forward
+0.81 GB (5%) of 15 GB used
+Manage
+Terms - Privacy
+Last account activity: 7 minutes ago
+Open in 1 other location  Details
+	
+	
+	Sawyer, Matthew Ryan CTR STRATCOM J64
+Show details
+
+RHEL 7 Server Build
+
+-----
+Pre-Requisites
+-----
+
+Hostname
+IP Address
+Gateway
+Subnet Mask
+VLAN
+vCPU 
+RAM
+DNS entries correct
+	NOTE: Verify both the forward and reverse lookups are correct
+LDAP entries correct
+	NOTE: Verify the server is part of the all_hosts netgroup
+OS Disk Size (50GB)
+	Note: For Systems requiring > 8GB of swap (i.e. Database Servers), Add (RAM-8GB) to the OS disk to account for the extra swap space needed
+	Note: For Systems requiring additional local home directory storage (i.e. Database Servers), add 5GB to the OS disk per local account
+
+-----
+Booting from the DVD
+-----
+
+Install Red Hat Enterprise Linux
+
+At the 'Welcome to Red Hat Enterprise Linux' screen, click Continue
+
+Under system > click on 'Network & Hostname'
+	Click the on/off button for the ethernet connection
+	Change the hostname to the FQDN
+	Click Configure
+		Under General
+			Check - Automatically connect to this network when it is available
+		Under IPv6 Settings
+			Select Method: Ignore
+		Under IPv4 Settings
+			Select Method: Manual
+			Click Add under Addresses
+			Fill in the Address / Netmask / Gateway
+			Fill in the DNS servers (separated by a comma)
+			Fill in the search domain
+		Click Save
+	Click Done
+Under system > click on 'KDUMP'
+	(OPTIONAL) uncheck 'Enable kdump'
+	NOTE: For a standard VM, Kdump is not required - it may be required for special purpose or physical servers.
+Under system > click on 'Installation Destination'
+	Ensure the 50GiB disk is selected with a checkmark
+	Under Other Storage Options select 'I will configure partitioning'
+	Click Done
+	-- Manual Partitioning
+	Click on the 'click here to create them automatically' link
+		Select the '/' partition
+			Change 'Desired Capacity' to 10 GiB
+			Change the 'Name' to 'lv_root'
+			Click 'Update Settings'
+			Under the 'Volume Group' click 'Modify...'
+				Change the name to 'vg_rhel7'
+				Change the 'Size policy' to 'As large as possible'
+				Click Save
+		Select the 'swap' partition
+			For systems with less than 16GB RAM, Change the 'Desired Capacity' to 4096 MiB
+			For systems with 16GB RAM or more, Change the 'Desired Capacity' to 8192 MiB
+			Change the 'Name' to lv_swap
+			Click 'Update Settings'
+	NOTE:	For OS Disks >50GB, the setup will automatically create a '/home' - In this event, change '/home' to '/local_home', size to '2048 MiB' and change the Name to 'lv_local_home'
+		Click the '+' button to add a new partition
+			Under 'Mount Point' enter '/local_home'
+			Under 'Desired Capacity' enter '2048 MiB'
+			Click 'Add Mount Point'
+			Change the 'Name' to 'lv_local_home'
+			Click 'Update Settings'
+		Click the '+' button to add a new partition
+			Under 'Mount Point' enter '/tmp'
+			Under 'Desired Capacity' enter '5120 MiB'
+			Click 'Add Mount Point'
+			Change the 'Name' to 'lv_tmp'
+			Click 'Update Settings'
+		Click the '+' button to add a new partition
+			Under 'Mount Point' enter '/var'
+			Under 'Desired Capacity' enter '15 GiB'
+			Click 'Add Mount Point'
+			Change the 'Name' to 'lv_var'
+			Click 'Update Settings'
+		Click the '+' button to add a new partition
+			Under 'Mount Point' enter '/var/log'
+			Under 'Desired Capacity' enter '2048 MiB'
+			Click 'Add Mount Point'
+			Change the 'Name' to 'lv_var_log'
+			Click 'Update Settings'
+		Click the '+' button to add a new partition
+			Under 'Mount Point' enter '/var/log/audit'
+			Under 'Desired Capacity' enter '2048 MiB'
+			Click 'Add Mount Point'
+			Change the 'Name' to 'lv_var_log_audit'
+			Click 'Update Settings'
+		Note: Only add the following if a local home directory is required - this example is for database
+				Click the '+' button to add a new partition
+					Under 'Mount Point' enter '/export/home/oracle'
+					Under 'Desired Capacity' enter '5120 MiB'
+					Click 'Add Mount Point'
+					Change the 'Name' to 'lv_oracle_home'
+					Click 'Update Settings'
+		Select the '/' partition
+			Identify the remaining space available (listed under the Volume Group), and add 10GB to it, then round up to the nearest GB.
+			Example:	6.56 GB remaining, +10GB, rounded up = 17 GB
+			Change 'Desired Capacity' to the combined value identified above
+			NOTE:		If you allocate over the amount of space available, it will automatically choose all remaining space.
+	Click Done
+	Click 'Accept Changes'
+Under Softare > click on 'Software Selection'
+	Under 'Base Environment' select 'Server with GUI'
+	Click Done
+Under Localization > Click 'Date & Time'
+	Under 'Region' select 'Etc'
+	Under 'City' select 'Coordinated Universal Time'
+	Under 'Network Time' change the switch to 'on'
+	Under 'Network Time' click the gears to configure NTP servers
+		Uncheck all 'rhel.pool.ntp' options
+		Add the default gateway by inputting the IP address in the top bar and clicking the '+'
+		Repeat for the '.2' and '.3' IP's in the same manner the default gateway was added
+		Click 'OK'
+	Click Done
+Click 'Begin Installation'
+
+Under 'User Settings' click on 'Root Password'
+	Input the root password under 'Root Password'
+	Input the root password again under 'Confirm'
+	Click Done
+Under 'User Settings' click on 'User Creation'
+	Under 'Full Name' input 'Local Administrator'
+	Under 'User name' change it to 'admin_local'
+	Check the box next to 'Make this user administrator'
+	Input the user password under 'Password'
+	Input the user password again under 'Confirm Password'
+	Click the box 'Advanced'
+		Change the 'Home directory' to '/local_home/admin_local'
+		Check the box next to 'Specify a user ID manually'
+		Change the number next to 'Specify a user ID manually' to '3333'
+		Check the box next to 'Specify a group ID manually'
+		Change the number next to 'Specify a group ID manually' to '3333'
+		click 'Save Changes'
+	Click Done
+
+Wait for the Installation process to complete
+	It will state "Red Hat Enterprise Linux is now successfully installed and ready for you to use!"
+Click 'Reboot'
+
+After rebooting the 'Initial Setup' menu will appear
+	Under Licensing click 'License information'
+		Check the box next to 'I accept the license agreement'
+		Click Done
+	Click 'Finish Configuration'
+
+The GUI login will appear - Log in as 'Local Administrator'
+Click Next at the welcome screen
+Click Next again
+Click Skip
+Click 'Start using Red Hat Enterprise Linux Server'
+Close the 'Getting Started' window that appears
+Right Click on the desktop and select 'Open Terminal'
+Gain Root access (# sudo -i)
+Begin configuration
+
+-----
+Bashrc Modification
+-----
+
+# vim /root/.bashrc
+	(append)
+	# Root Specific Configurations
+	HISTSIZE=9999
+	PS1="[\[\e[0;31m\]\u\[\e[0m\]]@[\[\e[0;36m\]\h\[\e[0m\]]:[\[\e[0;33m\]\w\[\e[0m\]] \\$ "
+	(save & quit)
+# vim /local_home/admin_local/.bashrc
+	(append)
+	# User Specific Configurations
+	HISTSIZE=9999
+	PS1="[\[\e[0;31m\]\u\[\e[0m\]]@[\[\e[0;36m\]\h\[\e[0m\]]:[\[\e[0;33m\]\w\[\e[0m\]] \\$ "
+	(save & quit)
+
+-----
+Modify /etc/fstab
+-----
+
+NOTE:	The purpose is to ensure the /etc/fstab is easily readable and complete
+Standards:	Header Exists
+		Tab Separated
+		Sections Start at same column
+# vim /etc/fstab
+	(Add a header)
+	# Device	Mountpoint	FStype		Options			FSDump/FSCK
+	(Add tmpfs directories)
+	(NOTE: the size=#M should be 1/2 RAM, in this example the system has 8GB of RAM)
+	devtmpfs	/dev		devtmpfs	defaults,size=4096M	0 0
+	tmpfs		/dev/shm	tmpfs		defaults,size=4096M	0 0
+	tmpfs		/run		tmpfs		defaults,size=4096M	0 0
+	tmpfs		/sys/fs/cgroup	tmpfs		defaults,size=4096M	0 0
+	(modify)
+	Change the /tmp line to have options of 'defaults,noexec'
+	(modify)
+	Change the '/' line to have FSDUMP/FSCK options of '1 1'
+	(modify)
+	Change non-root LVM partitions (except swap) to have FSDUMP/FSCK options of '1 2'
+	(save & quit)
+
+***** Example *****
+#
+# /etc/fstab
+#
+# Device                                        Mountpoint      FStype          Options                 FSDump/FSCK
+/dev/mapper/vg_rhel7-lv_root                    /               xfs             defaults                1 1
+UUID=4a0896c0-b566-4a56-bcb4-485c7189eeb0       /boot           xfs             defaults                0 0
+/dev/mapper/vg_rhel7-lv_local_home              /local_home     xfs             defaults                1 2
+/dev/mapper/vg_rhel7-lv_tmp                     /tmp            xfs             defaults,noexec         1 2
+/dev/mapper/vg_rhel7-lv_var                     /var            xfs             defaults                1 2
+/dev/mapper/vg_rhel7-lv_var_log                 /var/log        xfs             defaults                1 2
+/dev/mapper/vg_rhel7-lv_var_log_audit           /var/log/audit  xfs             defaults                1 2
+/dev/mapper/vg_rhel7-lv_swap                    swap            swap            defaults                0 0
+devtmpfs                                        /dev            devtmpfs        defaults,size=4096M     0 0
+tmpfs                                           /dev/shm        tmpfs           defaults,size=4096M     0 0
+tmpfs                                           /run            tmpfs           defaults,size=4096M     0 0
+tmpfs                                           /sys/fs/cgroup  tmpfs           defaults,size=4096M     0 0
+***** Example *****
+
+-----
+Connect to Sysadmin Share
+-----
+
+For ULAN:
+	# mkdir -p /Sysadmin/ENG
+	# mkdir -p /Sysadmin/UNIX
+	# mount -o vers=3,nosuid,nodev sys14024-lh2:/global/sysadmin/ENG /Sysadmin/ENG
+	# mount -o vers=3,nosuid,nodev sys14024-lh2:/global/sysadmin/UNIX /Sysadmin/UNIX
+
+For C2LAN:
+	# mkdir /Sysadmin
+	# mount -o vers=3,nosuid,nodev syl24567-lh1:/global/exports/sysadmin /Sysadmin
+
+For TSLAN:
+	# mkdir /Sysadmin
+	# mount -o vers=3,nosuid,nodev syl44537-lh1:/global/exports/sysadmin /Sysadmin
+
+-----
+Update Repository
+-----
+
+# rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+# /Sysadmin/UNIX/scripts/baseline/RHEL_7/RHEL_7-CONFIG-Repo_Fix.sh
+
+-----
+Remove virtual bridge
+-----
+
+# virsh net-destroy default
+# virsh net-undefine default
+
+-----
+Remove unnecessary packages
+-----
+
+# yum -y remove rhn*
+# yum -y remove abrt*
+# yum -y remove orca
+# yum -y remove Red_Hat_Enterprise_Linux-Release_Notes-7*
+# yum -y remove redhat-access-gui
+# yum -y remove gnome-weather
+# yum -y remove gnome-video-effects
+# yum -y remove gnome-packagekit-updater
+# yum -y remove gnome-software
+# yum -y remove fprintd
+# yum -y remove empathy
+# yum -y remove totem
+# yum -y remove icedtea-web
+# yum -y remove firefox
+# yum -y remove qemu-kvm
+# yum -y remove anaconda-user-help
+# yum -y remove libvirt*
+# yum -y remove virt-what
+# yum -y remove libgovirt
+# yum -y remove redhat-support*
+# yum -y remove redhat-indexhtml
+
+-----
+Install additional required packages
+-----
+
+# yum -y install sssd
+# yum -y install autofs
+# yum -y install aide
+# yum -y install ntp
+# yum -y install screen
+# yum -y install ksh
+# yum -y install zsh
+# yum -y install net-snmp
+
+Reboot the system to ensure configurations are persistent
+	# init 6
+
+-----
+Selinux Modifications
+-----
+
+# semanage fcontext -a -t home_root_t '/local_home'
+# semanage fcontext -a -t user_home_dir_t '/local_home/admin_local'
+# semanage fcontext -a -t user_home_t '/local_home/admin_local(/.*)?'
+
+# restorecon -RFvv /local_home
+
+# setsebool -P use_nfs_home_dirs 1
+
+-----
+Connect to LDAP
+-----
+
+# /Sysadmin/ENG/scripts/baseline/RHEL_7/RHEL_7-LDAP_Bind.sh
+
+Information below is for reference:
+
+For ULAN:
+	mkdir -p /etc/openldap/cacerts
+	cp /Sysadmin/ENG/templates/RHEL_7/sssd/nsswitch.conf /etc/nsswitch.conf
+	cp /Sysadmin/ENG/templates/RHEL_7/sssd/authconfig_downloaded.pem /etc/openldap/cacerts/
+	authconfig --enableldap --enableldapauth --ldapserver=ldaps://sys10004:636 --ldapbasedn=dc=stratcom,dc=mil --enableldaptls --ldaploadcacert=file:///etc/openldap/cacerts/authconfig_downloaded.pem --update
+	cp /Sysadmin/ENG/templates/RHEL_7/sssd/sssd.conf /etc/sssd/sssd.conf
+	systemctl restart sssd
+
+For C2LAN:
+	mkdir -p /etc/openldap/cacerts
+	cp /Sysadmin/ENG/templates/RHEL_7/sssd/nsswitch.conf /etc/nsswitch.conf
+	cp /Sysadmin/ENG/templates/RHEL_7/sssd/authconfig_downloaded.pem /etc/openldap/cacerts/
+	authconfig --enableldap --enableldapauth --ldapserver=ldaps://sys24051:636 --ldapbasedn=dc=stratcom,dc=smil,dc=mil --enableldaptls --ldaploadcacert=file:///etc/openldap/cacerts/authconfig_downloaded.pem --update
+	cp /Sysadmin/ENG/templates/RHEL_7/sssd/sssd.conf /etc/sssd/sssd.conf
+	systemctl restart sssd
+
+For TSLAN:
+	/Sysadmin/ENG/scripts/baseline/RHEL_7/RHEL_7-LDAP_Bind.sh
+
+Reboot the system to ensure configurations are persistent
+	# init 6
+
+-----
+Modify Network Interface Names
+-----
+
+# vim /etc/default/grub
+	(append to the 'GRUB_CMDLINE_LINUX', within the quotes)
+	net.ifnames=0 biosdevnames=0
+	(save & quit)
+
+# grub2-mkconfig -o /boot/grub2/grub.cfg
+
+Rename the existing Interface to eth0
+	# mv /etc/sysconfig/network-scripts/ifcfg-en* /etc/sysconfig/network-scripts/ifcfg-eth0
+	NOTE: The above command assumes you only have one interface.  If you have multiple, perform each individually and substitute for eth1, eth2, etc.
+
+# vim /etc/sysconfig/network-scripts/ifcfg-eth0
+	(modify, change instances of eno16700#### to eth0)
+	NAME=eth0
+	DEVICE=eth0
+	(Remove the following Lines:)
+		IPV6_AUTOCONF=yes
+		IPV6_DEFROUTE=yes
+		IPV6_PEERDNS=yes
+		IPV6_PEERROUTES=yes
+		IPV6_FAILURE_FATAL=no
+	(save & quit)
+
+Reboot the system to ensure configurations are persistent
+	# init 6
+
+-----
+Non-STIG specific Configurations
+-----
+
+# sed -i 's/\sbin\/rngd \-f/\sbin\/rngd \-f \-r \/dev\/urandom \-o \/dev\/random/' /usr/lib/systemd/system/rngd.service
+
+# systemctl daemon-reload
+# systemctl restart rngd.service
+
+# systemctl stop unbound-anchor.timer
+# systemctl disable unbound-anchor.timer
+
+-----
+STIG remediations
+-----
+
+# systemctl enable ntpd
+# systemctl start ntpd
+
+# sed -i '/vc\/[0-9]/d' /etc/securetty
+
+# printf "# STIG ID RHEL-06-000069\nSINGLE=/sbin/sulogin\n# STIG ID RHEL-06-000070\nPROMPT=no\n" >> /etc/sysconfig/init
+
+# sed -i '/\[global\]/a client signing = mandatory' /etc/samba/smb.conf
+
+# rpm --setperms audit
+
+# systemctl mask ctrl-alt-del.target
+
+# sed -i '/End of file/d' /etc/security/limits.conf
+# printf "*\t\thard\tcore\t\t0\n*\t\thard\tmaxlogins\t10\n" >> /etc/security/limits.conf
+
+# sed -i 's/INACTIVE\=\-1/INACTIVE\=35/' /etc/default/useradd
+
+# sed -e '/^com2sec/ s/^#*/#/' -i /etc/snmp/snmpd.conf
+# sed -e '/^group.*\ v1\ .*/ s/^#*/#/' -i /etc/snmp/snmpd.conf
+# sed -e '/^group.*\ v2c\ .*/ s/^#*/#/' -i /etc/snmp/snmpd.conf
+# systemctl restart snmpd
+
+# sed -i 's/umask 002/umask 077/' /etc/bashrc /etc/csh.cshrc /etc/profile
+# sed -i 's/umask 022/umask 077/' /etc/bashrc /etc/csh.cshrc /etc/profile
+
+# sed -i 's/active \= no/active \= yes/' /etc/audisp/plugins.d/syslog.conf
+
+	- Set the appropriate mail forwarding
+NIPR:	
+	# echo "root: stratcom.offutt.j64.list.j646-unix-services@mail.mil" >> /etc/aliases
+	# newaliases
+
+C2LAN:
+	# echo "root: stratcom.offutt.j64.list.unix-services@mail.smil.mil" >> /etc/aliases
+	# newaliases
+
+TSLAN:
+	# echo "root: Unixadmins@STRATCOMT.EMIL.MIL" >> /etc/aliases
+	# newaliases
+
+# echo "chmod 0600 /var/log/boot.log" >> /etc/rc.d/rc.local
+# chmod u+x /etc/rc.d/rc.local
+
+# systemctl set-default multi-user.target
+
+-----
+Start real STIG remediations
+-----
+
+# /Sysadmin/ENG/scripts/baseline/RHEL_7/RHEL_7-Firewall_Setup.sh
+
+# cd /Sysadmin/UNIX/scripts/baseline/RHEL_7/
+	Run all of the scripts except Aide Installation
+
+-----
+Transition Configurations
+-----
+
+Set the Grub Password
+	# /Sysadmin/ENG/scripts/baseline/RHEL_7/RHEL_7-GRUB_PW_Change.sh
+	(input password, twice)
+	cd /
+
+Install hbss, mcafee, and sudoers copy scripts
+	# /Sysadmin/UNIX/scripts/baseline/hbss_install.sh
+	# /Sysadmin/UNIX/scripts/baseline/mcafee_install.sh
+	# /Sysadmin/UNIX/scripts/baseline/sudoers_install.sh
+	NOTE: The ULAN does not have an hbss_install or sudoers_install
+
+
+Set the Root Password
+	# passwd
+	(input password, twice)
+
+Perform the Aide Installation
+	# /Sysadmin/UNIX/scripts/baseline/RHEL_7/RHEL_7-CONFIG-Aide_Installation.sh
+
+RHEL_7 build.txt
+Displaying RHEL_7 build.txt.
