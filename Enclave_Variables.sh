@@ -26,8 +26,6 @@ set_variables ()
   DOMAIN="domain.com"
   AIDE_EXCLUSION="\!/directory_to_exclude/dir"
   ROOT_MAIL="(email for root's mail)"
-
-	cd /
 }
 
 # Ending script function - add cleanup notes here
