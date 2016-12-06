@@ -39,3 +39,7 @@ the applicable major release version for RHEL.
 * Not all optional settings will be clearly idenified
 * This is a guideline, not a prescription - use at your own risk
 * With great power comes great responsibility!
+
+## Updates
+
+* In general, more to come - little by little
