@@ -16,6 +16,15 @@ purposes.  These guidelines should be tailored to your specific operational
 environment based on needs and capabilities.  Build Documents are available for
 RHEL 6 and RHEL 7.
 
+## Enclave Variables
+
+The Enclave Varibles is designed to allow these scripts to be easily configured
+for multiple environments.  There are a limited number of enclave specific
+configurations, and this is an attempt to identify as many as possible.  If used
+correctly, this combined with the build scripts and document can almost
+completely automate building a new system.  Proper care and feeding of these
+variables is important.
+
 ## RHEL Scripts
 
 Each script is designed to be kernel independent.  They will each perform an
