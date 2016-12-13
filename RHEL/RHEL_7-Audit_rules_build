@@ -1,7 +1,7 @@
 #!/bin/bash
 ################################################################################
 #
-# ./RHEL_7-CONFIG-Audit_rules_build.sh
+# (RHEL_STIG_Baseline)/RHEL/RHEL_Audit_rules_build.sh
 #	
 #	This script is designed to copy the audit.rules template based on the
 #	correct architecture, and build the system specific audit configurations
@@ -14,16 +14,6 @@
 #
 # Created by:		Matthew R. Sawyer
 # Last modified by:	Matthew R. Sawyer
-#
-# Modification History:
-#
-# 20160129 sawyerm	Re-creation of script based on previous work
-#			This version is designed to work with the new Sysadmin
-#			share /Sysadmin/UNIX/- and updated templates based on
-#			STIG updates and clarification
-# 20160303 sawyerm	Modified RHEL6 version to be compatible with RHEL7
-# 20160318 bramr	Changed RHEL 6 references to RHEL 7
-# 20160321 sawyerm	Updated and Verified RHEL 7 changes.
 #
 ################################################################################
 # Sourcing and Header notes
