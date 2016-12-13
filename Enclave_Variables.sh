@@ -4,8 +4,21 @@
 # /Sysadmin/UNIX/scripts/Enclave_variables.sh
 #	
 # This script is designed to be referenced by other scripts.  It contains the
-# specific variables used by the RHEL_STIG_Lockdown scripts.  These should be
-# configured prior to running those scripts.
+# specific variables used by the RHEL_STIG_Lockdown scripts.  These variables
+# should be configured prior to running the scripts.
+#
+# Enclave variables means the specific configurations for your organization or
+# network.  This is intended to be as universal as reasonably possible, allowing
+# people to modify only one script to customize the collection of baseline
+# scripts to their specific requirements.
+#
+# Future enhancement:  In the future, this script is intended to allow you to
+# input the variables by running it instead of manual modification.
+#
+################################################################################
+#
+# Created by:        Matthew R. Sawyer
+# Last modified by:  Matthew R. Sawyer
 #
 ################################################################################
 #  Beginning of Script
@@ -19,13 +32,13 @@ set_variables ()
   CUR_HOST=`uname -n`            # Current hostname
   ORIG_DIR=`pwd`                 # Saves Original Directory
 	
-# Start Setting Real Enclave Variables
-  REMOTE_LOG_IP="xxx.xxx.xxx.xxx"
-  REMOTE_LOG_PROTO=PROTO  # Options: TCP,UDP,RELP
-  FW_ORGANIZATION="Organization"
-  DOMAIN="domain.com"
-  AIDE_EXCLUSION="\!/directory_to_exclude/dir"
-  ROOT_MAIL="(email for root's mail)"
+  # Start Setting Real Enclave Variables
+  REMOTE_LOG_IP="remote_log_ip"        # IP to send syslog messages to
+  REMOTE_LOG_PROTO="remote_log_proto"  # Options: TCP,UDP,RELP
+  ORG_SHORTNAME="org_shortname"        # Short description of Organization
+  DOMAIN="example.com"                 # Primary domain extension
+  AIDE_EXCLUSION="aide_exclusion"      # Directories to exclude in aide baseline
+  ROOT_MAIL="root_mail"                # Email address to send root's mail to
 }
 
 # Ending script function - add cleanup notes here
