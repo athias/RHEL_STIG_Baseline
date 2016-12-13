@@ -1,7 +1,7 @@
 #!/bin/bash
 ################################################################################
 #
-# /Sysadmin/UNIX/scripts/Enclave_variables.sh
+# (RHEL_STIG_Baseline)/Enclave_variables.sh
 #	
 # This script is designed to be referenced by other scripts.  It contains the
 # specific variables used by the RHEL_STIG_Lockdown scripts.  These variables
