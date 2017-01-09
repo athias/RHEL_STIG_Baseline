@@ -1,0 +1,82 @@
+###############################################################################
+#
+# /etc/ssh/sshd_config
+#   chown root:root
+#   chmod 600
+#
+# The RHEL 6 Settings were interpreted for equivalent settings within RHEL 7,
+# and derived from the following:
+#   Red Hat Enterprise Linux 6 Security Technical Implementation Guide
+#   Version 1, Release 13, dated 18 Oct 2016
+#
+################################################################################
+
+# RHEL-06-000227	V-38607
+# The SSH daemon must be configured to use only the SSHv2 protocol
+Protocol 2
+ 
+# RHEL-06-000230	V-38608
+# The SSH daemon must set a timeout interval on idle sessions
+ClientAliveInterval 900
+
+# RHEL-06-000231	V-38610
+# The SSH daemon must set a timeout count on idle sessions
+ClientAliveCountMax 0
+
+# RHEL-06-000234	V-38611
+# The SSH daemon must ignore .rhosts files
+IgnoreRhosts yes
+
+# RHEL-06-000236	V-38612
+# The SSH daemon must not allow host-based authentication
+HostbasedAuthentication no
+
+# RHEL-06-000237	V-38613
+# The system must not permit root logins using remote access programs such as ssh
+PermitRootLogin no
+
+# RHEL-06-000239	V-38614
+# The SSH daemon must not allow authentication using an empty password
+PermitEmptyPasswords no
+
+# RHEL-06-000240	V-38615
+# The SSH daemon must be configured with the Department of Defense (DoD) login banner
+Banner /etc/issue
+
+# RHEL-06-000241	V-38616
+# The SSH daemon must not permit user environment settings
+PermitUserEnvironment no
+
+# RHEL-06-000243	V-38617
+# The SSH daemon must be configured to use only FIPS 140-2 approved ciphers
+Ciphers aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc
+
+# RHEL-06-000507	V-38484
+# The operating system, upon successful logon, must display to the user the date
+# and time of the last logon or access via ssh
+PrintLastLog yes
+
+################################################################################
+# End of STIG settings, beginning of custom settings
+################################################################################
+
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+AuthorizedKeysFile .ssh/authorized_keys
+PasswordAuthentication yes
+ChallengeResponseAuthentication no
+GSSAPIAuthentication yes
+GSSAPICleanupCredentials yes
+UsePAM yes
+AcceptEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
+AcceptEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT
+AcceptEnv LC_IDENTIFICATION LC_ALL LANGUAGE
+AcceptEnv XMODIFIERS
+X11Forwarding yes
+Subsystem sftp /usr/libexec/openssh/sftp-server
+UsePrivilegeSeparation sandbox
+
+################################################################################
+# End of File
+################################################################################
