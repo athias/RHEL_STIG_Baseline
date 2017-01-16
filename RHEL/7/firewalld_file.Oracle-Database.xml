@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Oracle Database</short>
+  <description>Ports required for to an Oracle Database Server</description>
+  <port protocol="tcp" port="22"/>
+  <port protocol="tcp" port="1521"/>
+  <port protocol="udp" port="1521"/>
+  <port protocol="tcp" port="1525"/>
+  <port protocol="tcp" port="1526"/>
+  <port protocol="tcp" port="1527"/>
+  <port protocol="tcp" port="1528"/>
+  <port protocol="tcp" port="1529"/>
+  <port protocol="tcp" port="1575"/>
+  <port protocol="tcp" port="3872"/>
+</service>
