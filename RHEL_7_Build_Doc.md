@@ -5,6 +5,7 @@
 2. Pre-requisite Validation
 3. Recommended Configurations
 4. Base OS Installation
+5. Post Installation Configurations
 
 ## Assumptions
 
@@ -50,6 +51,7 @@
 ### VMWare Specific Configurations
 
 #### Virtual Hardware
+
 Section | Setting | Value
 --------|---------|------
 VM Version | \* | Upgrade to the Latest Version
@@ -64,6 +66,7 @@ Video Card | \* | Auto-Detect Settings
 Video Card | Enable 3D Support | Checked
 
 #### VM Options
+
 Section | Setting | Value
 --------|---------|------
 General Options | Guest OS | Linux
@@ -94,8 +97,7 @@ Boot Options | Boot Delay | 10000
   * Click Done
 
 * Under system > click on 'KDUMP'
-  * (OPTIONAL) uncheck 'Enable kdump'
-
+  * (OPTIONAL) uncheck 'Enable kdump'  
 > NOTE: For most systems, kdump is not likely required.  It may be required for special purpose or physical servers.  It is most commonly used in application development systems, specifically for testing purposes.
 
 * Under system > click on 'Installation Destination'
@@ -109,12 +111,12 @@ Boot Options | Boot Delay | 10000
     * Change the name to 'vg_rhel7'
     * Change the 'Size Policy' to 'As large as possible'
     * Click Ok
-  * Configure partitions based on the recommendations in the table below:
+  * Configure partitions based on the recommendations in the table below:  
 
 Mountpoint | Size | Volume Group | Name
 -----------|------|--------------|------
 /boot | 1024 MiB | N/A - sda1 | N/A
-/ | * | vg_rhel7 | lv_root
+/ | \* | vg_rhel7 | lv_root
 [swap] | 8192 MiB | vg_rhel7 | lv_swap
 /local_home | 2048 MiB | vg_rhel7 | lv_local_home
 /tmp | 5120 MiB | vg_rhel7 | lv_tmp
@@ -122,10 +124,8 @@ Mountpoint | Size | Volume Group | Name
 /var/log | 2048 MiB | vg_rhel7 | lv_var_log
 /var/log/audit | 2048 MiB | vg_rhel7 | lv_var_log_audit
 
-> NOTE: The asterisk at the size of the root partition represents the usage of any remaining space.  In the configuration above, that leaves 15 GiB for root.
-
-> NOTE: For systems with more than 50GB disk space, a '/home' partition will be created automatically.  For systems with less than 50GB disk space, all extra space will be added to the root '/' partition.
-
+> NOTE: The asterisk at the size of the root partition represents the usage of any remaining space.  In the configuration above, that leaves 15 GiB for root.  
+> NOTE: For systems with more than 50GB disk space, a '/home' partition will be created automatically.  For systems with less than 50GB disk space, all extra space will be added to the root '/' partition.  
   * Click Done
   * Click 'Accept Changes'
 
@@ -152,16 +152,16 @@ Mountpoint | Size | Volume Group | Name
 
 * Under 'User Settings' click on 'User Creation'
   * Under 'Full Name' input 'Local Administrator'
-  * Under 'User name' change it to 'admin_local'
+  * Under 'User name' change it to 'local_admin'
   * Check the box next to 'Make this user administrator'
   * Input the user password under 'Password'
   * Input the user password again under 'Confirm Password'
     * Click the box 'Advanced'
-    * Change the 'Home directory' to '/local_home/admin_local'
+    * Change the 'Home directory' to '/local_home/local_admin'
     * Check the box next to 'Specify a user ID manually'
-    * Change the number next to 'Specify a user ID manually' to '3333'
+    * Ensure the number next to 'Specify a user ID manually' is set to '1000'
     * Check the box next to 'Specify a group ID manually'
-    * Change the number next to 'Specify a group ID manually' to '3333'
+    * Ensure the number next to 'Specify a user ID manually' is set to '1000'
     * click 'Save Changes'
   * Click Done
 
@@ -170,4 +170,46 @@ Mountpoint | Size | Volume Group | Name
 > NOTE: It will state "Red Hat Enterprise Linux is now successfully installed and ready for you to use!"
 
 * Click 'Reboot'
+
+## Post Installation Configurations
+
+* Log into the system and gain root access
+
+### Reconfigure Network Devices  
+> NOTE: RHEL 7 uses hardware related naming conventions by default, and the configuration below disables that.  When system hardware is modified, especially in the case of VM hardware versions it can change the names of network interfaces.  This can cause your network to stop working, and prevent access from certain applications - notably Oracle RAC Databases.  
+> NOTE: If the system has more than one interface configured, these steps will fail.  Please do multiple interfaces manually.
+
+* Modify The default grub Configuration  
+`# sed -i 's/rhgb quiet\"$/rhgb quiet net.ifnames\=0 biosdevnames\=0\"/' /etc/default/grub`
+
+* Make the configuration persistent
+  * For Systems with BIOS:  
+  `# grub2-mkconfig -o /boot/grub2/grub.cfg`  
+  * For Systems with UEFI:  
+  `# grub2-mkconfig -o /boot/efi/EFI/redhat/grub.cfg`  
+
+* Identify the old Interface  
+`# OLD_NET=$(ls -l /etc/sysconfig/network-scripts/ifcfg-* | egrep -v "*.old$|ifcfg-lo$" | awk '{print $9}')`
+
+* Rename the old interface to eth0  
+`# NEW_NET=/etc/sysconfig/network-scripts/ifcfg-eth0`  
+`# mv ${OLD_NET} ${NEW_NET}`  
+
+* Modify the new Network Interface Configuration  
+`# OLD_NET_NAME=$(echo ${OLD_NET} | sed 's/.*ifcfg-//')`  
+`# sed -i "s/${OLD_NET_NAME}/eth0/g" ${NEW_NET}`  
+`# sed -i '/IPV6_AUTOCONF/d' ${NEW_NET}`  
+`# sed -i '/IPV6_DEFROUTE/d' ${NEW_NET}`  
+`# sed -i '/IPV6_PEERDNS/d' ${NEW_NET}`  
+`# sed -i '/IPV6_PEERROUTES/d' ${NEW_NET}`   
+`# sed -i '/IPV6_FAILURE_FATAL/d' ${NEW_NET}`  
+`# sed -i '/UUID=/d' ${NEW_NET}`  
+
+* Reboot the system to ensure the settings are persistent
+
+`# systemctl reboot`
+
+> NOTE:  The system MUST be rebooted at this time.  If it is not rebooted, future configurations may cause the system to fail to boot.
+
+
 
