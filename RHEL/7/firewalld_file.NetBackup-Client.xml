@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>NetBackup Client</short>
+  <description>Ports required for a NetBackup Client</description>
+  <port protocol="tcp" port="1556"/>
+  <port protocol="tcp" port="13724"/>
+</service>
