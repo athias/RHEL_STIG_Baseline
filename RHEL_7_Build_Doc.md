@@ -5,11 +5,19 @@ https://gitprint.com/athias/RHEL_STIG_Baseline/blob/master/RHEL_7_Build_Doc.md
 
 ## Table of Contents
 1. Assumptions
-2. Pre-requisite Validation
+2. Prerequisites
 3. Recommended Configurations
+  1. Core Configurations
+  2. VMWare Specific Configurations
+    1. Virtual Hardware
+    2. VM Options
 4. Base OS Installation
+  1. Core Configurations
+  2. Partitioning
+  3. User Configurations
 5. Post Installation Configurations
-
+  1. Reconfigure Network Device
+  
 ## Assumptions
 
 * NFS services are used for home directories
@@ -154,7 +162,7 @@ Mountpoint | Size | Volume Group | Name
 
 * Click 'Accept Changes'
 
-### Installation Configuration
+### User Configuration
 
 * Click 'Begin Installation'
 
@@ -188,7 +196,7 @@ Mountpoint | Size | Volume Group | Name
 
 * Log into the system and gain root access
 
-### Reconfigure Network Devices  
+### Reconfigure Network Device  
 > NOTE: RHEL 7 uses hardware related naming conventions by default, and the configuration below disables that.  When system hardware is modified, especially in the case of VM hardware versions it can change the names of network interfaces.  This can cause your network to stop working, and prevent access from certain applications - notably Oracle RAC Databases.  
 > NOTE: If the system has more than one interface configured, these steps will fail.  Please do multiple interfaces manually.
 
