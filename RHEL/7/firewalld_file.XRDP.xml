@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <service version="1">
-  <short>ITCC-XRDP</short>
+  <short>XRDP</short>
   <description>Enable RDP access as an XRDP server</description>
   <port protocol="tcp" port="3389"/>
 </service>
