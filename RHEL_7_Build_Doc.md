@@ -76,6 +76,8 @@ Boot Options | Boot Delay | 10000
 
 ## Base OS Installation
 
+### Core Configurations
+
 * Power on VM
   * VM Should automatically boot to RHEL 7
     * Verify Pre-requisites and VM Configuration if this does not happen
@@ -100,35 +102,6 @@ Boot Options | Boot Delay | 10000
   * (OPTIONAL) uncheck 'Enable kdump'  
 > NOTE: For most systems, kdump is not likely required.  It may be required for special purpose or physical servers.  It is most commonly used in application development systems, specifically for testing purposes.
 
-* Under system > click on 'Installation Destination'
-  * Ensure the 50GiB disk is selected with a checkmark
-  * Under Other Storage Options select 'I will configure partitioning'
-    * Click Done
-
-* Configure Manual Partitioning
-  * Click on the 'click here to create them automatically' link
-  * Under any listed partition click 'Modify...' Under 'Volume Group'
-    * Change the name to 'vg_rhel7'
-    * Change the 'Size Policy' to 'As large as possible'
-    * Click Ok
-  * Configure partitions based on the recommendations in the table below:  
-
-Mountpoint | Size | Volume Group | Name
------------|------|--------------|------
-/boot | 1024 MiB | N/A - sda1 | N/A
-/ | \* | vg_rhel7 | lv_root
-[swap] | 8192 MiB | vg_rhel7 | lv_swap
-/local_home | 2048 MiB | vg_rhel7 | lv_local_home
-/tmp | 5120 MiB | vg_rhel7 | lv_tmp
-/var | 15 GiB | vg_rhel7 | lv_var
-/var/log | 2048 MiB | vg_rhel7 | lv_var_log
-/var/log/audit | 2048 MiB | vg_rhel7 | lv_var_log_audit
-
-> NOTE: The asterisk at the size of the root partition represents the usage of any remaining space.  In the configuration above, that leaves 15 GiB for root.  
-> NOTE: For systems with more than 50GB disk space, a '/home' partition will be created automatically.  For systems with less than 50GB disk space, all extra space will be added to the root '/' partition.  
-  * Click Done
-  * Click 'Accept Changes'
-
 * Under Software > click on 'Software Selection'
   * Under 'Base Environment' ensure 'minimal' is selected
   * Click Done
@@ -144,11 +117,48 @@ Mountpoint | Size | Volume Group | Name
     * Click 'OK'
   * Click Done
 
-* Click 'Begin Installation'
-  * Under 'User Settings' click on 'Root Password'
-    * Input the root password under 'Root Password'
-    * Input the root password again under 'Confirm'
+### Partitioning
+
+* Under system > click on 'Installation Destination'
+  * Ensure the 50GiB disk is selected with a checkmark
+  * Under Other Storage Options select 'I will configure partitioning'
     * Click Done
+
+* Click on the 'click here to create them automatically' link
+
+* Under any listed partition click 'Modify...' Under 'Volume Group'
+  * Change the name to 'vg_rhel7'
+  * Change the 'Size Policy' to 'As large as possible'
+  * Click Ok
+
+* Configure partitions based on the recommendations in Partition Table below
+
+Mountpoint | Size | Volume Group | Name
+-----------|------|--------------|------
+/boot | 1024 MiB | N/A - sda1 | N/A
+/ | \* | vg_rhel7 | lv_root
+[swap] | 8192 MiB | vg_rhel7 | lv_swap
+/local_home | 2048 MiB | vg_rhel7 | lv_local_home
+/tmp | 5120 MiB | vg_rhel7 | lv_tmp
+/var | 15 GiB | vg_rhel7 | lv_var
+/var/log | 2048 MiB | vg_rhel7 | lv_var_log
+/var/log/audit | 2048 MiB | vg_rhel7 | lv_var_log_audit
+
+> NOTE: The asterisk at the size of the root partition represents the usage of any remaining space.  In the configuration above, that leaves 15 GiB for root.  
+> NOTE: For systems with more than 50GB disk space, a '/home' partition will be created automatically.  For systems with less than 50GB disk space, all extra space will be added to the root '/' partition.  
+
+* Click Done
+
+* Click 'Accept Changes'
+
+### Installation Configuration
+
+* Click 'Begin Installation'
+
+* Under 'User Settings' click on 'Root Password'
+  * Input the root password under 'Root Password'
+  * Input the root password again under 'Confirm'
+  * Click Done
 
 * Under 'User Settings' click on 'User Creation'
   * Under 'Full Name' input 'Local Administrator'
@@ -205,11 +215,11 @@ Mountpoint | Size | Volume Group | Name
 `# sed -i '/IPV6_FAILURE_FATAL/d' ${NEW_NET}`  
 `# sed -i '/UUID=/d' ${NEW_NET}`  
 
-* Reboot the system to ensure the settings are persistent
-
-`# systemctl reboot`
-
+* Reboot the system to ensure the settings are persistent  
+`# systemctl reboot`  
 > NOTE:  The system MUST be rebooted at this time.  If it is not rebooted, future configurations may cause the system to fail to boot.
+
+
 
 
 
