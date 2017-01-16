@@ -1,6 +1,7 @@
 # RHEL 7 Build Document
 
-To View this document in an easy printable format, click [here](https://gitprint.com/athias/RHEL_STIG_Baseline/blob/master/RHEL_7_Build_Doc.md).
+View and print this document:  
+https://gitprint.com/athias/RHEL_STIG_Baseline/blob/master/RHEL_7_Build_Doc.md
 
 ## Table of Contents
 1. Assumptions
