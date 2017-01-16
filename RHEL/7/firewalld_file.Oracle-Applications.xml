@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Oracle-Application</short>
+  <description>Ports required for various Oracle Application Servers</description>
+  <port protocol="tcp" port="443"/>
+  <port protocol="tcp" port="80"/>
+  <port protocol="tcp" port="9090"/>
+  <port protocol="tcp" port="7000-8999"/>
+  <port protocol="tcp" port="3161"/>
+  <port protocol="tcp" port="3060"/>
+  <port protocol="tcp" port="4000-5999"/>
+  <port protocol="tcp" port="9080"/>
+</service>
