@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Actifio Client</short>
+  <description>Ports required for an Actifio Client</description>
+  <port protocol="tcp" port="56789"/>
+  <port protocol="tcp" port="3260"/>
+  <port protocol="tcp" port="5106"/>
+</service>
