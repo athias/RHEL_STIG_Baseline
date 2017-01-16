@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Identity Management</short>
+  <description>Ports required Identity Management Servers</description>
+  <port protocol="tcp" port="88"/>
+  <port protocol="tcp" port="389"/>
+  <port protocol="tcp" port="443"/>
+  <port protocol="tcp" port="636"/>
+  <port protocol="tcp" port="1389"/>
+  <port protocol="tcp" port="1636"/>
+  <port protocol="tcp" port="4444"/>
+  <port protocol="tcp" port="8989"/>
+  <port protocol="tcp" port="7001"/>
+  <port protocol="tcp" port="7002"/>
+</service>
