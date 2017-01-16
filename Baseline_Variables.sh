@@ -43,23 +43,24 @@ set_variables ()
   DOMAIN="example.com"                 # Primary domain extension
   AIDE_EXCLUSION="aide_exclusion"      # Directories to exclude in aide baseline
   ROOT_MAIL="root_mail"                # Email Address to send root's mail to
+  FW_ICMP_SUBNET="fw_icmp_subnet"      # Subnet to enable ICMP requests in
 }
 
 # Ending script function - add cleanup notes here
 end_script ()
 {
-        sleep 1
-        cd $ORIG_DIR
-        exit
+  sleep 1
+  cd $ORIG_DIR
+  exit
 }
 
 # Root UID check
 root_uid_check ()
 {
-	if [[ "$EUID" != "0" ]];then
-		printf "\n\e[0;31mERROR:\e[0m\tThis script must be run as root\n"
-		end_script
-	fi
+  if [[ "$EUID" != "0" ]];then
+    printf "\n\e[0;31mERROR:\e[0m\tThis script must be run as root\n"
+    end_script
+  fi
 }
 
 # Backup Directory Check
