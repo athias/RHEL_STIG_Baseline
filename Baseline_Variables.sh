@@ -44,6 +44,7 @@ set_variables ()
   AIDE_EXCLUSION="aide_exclusion"      # Directories to exclude in aide baseline
   ROOT_MAIL="root_mail"                # Email Address to send root's mail to
   FW_ICMP_SUBNET="fw_icmp_subnet"      # Subnet to enable ICMP requests in
+  ADMIN_HOMEDIR="admin_homedir"        # Base home directory of admin user
 }
 
 # Ending script function - add cleanup notes here
