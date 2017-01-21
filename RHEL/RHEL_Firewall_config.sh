@@ -96,6 +96,7 @@ firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-Identity-Management
 firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-NetBackup-Client
 firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-Oracle-Applications
 firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-Oracle-Database
+firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-RPC-mountd
 firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-SNMP
 firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-TSM-Backup-Client
 firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-XRDP
