@@ -1,0 +1,101 @@
+###############################################################################
+#
+# /etc/audit/rules.d/audit.rules
+#   chown root:root
+#   chmod 600
+#
+# The RHEL 6 Settings were interpreted for equivalent settings within RHEL 7,
+# and derived from the following:
+#   Red Hat Enterprise Linux 6 Security Technical Implementation Guide
+#   Version 1, Release 13, dated 18 Oct 2016
+#
+################################################################################
+
+# First rule - delete all
+-D
+
+# Establish appropriate buffer size
+-b 8192
+
+# Set failure mode to panic
+-f 2
+
+# audit_time_rules - V-38635, V-38522, V-38525, V-38527, V-38530
+-a always,exit -F arch=b64 -S adjtimex -S settimeofday -k audit_time_rules
+-a always,exit -F arch=b64 -S clock_settime -F a0=0 -k audit_time_rules
+-w /etc/localtime -p wa -k audit_time_rules
+
+# audit_account_changes - V-38531, V-38534, V-38536, V-38538
+-w /etc/group -p wa -k audit_account_changes
+-w /etc/passwd -p wa -k audit_account_changes
+-w /etc/gshadow -p wa -k audit_account_changes
+-w /etc/shadow -p wa -k audit_account_changes
+-w /etc/security/opasswd -p wa -k audit_account_changes
+
+
+# audit_network_modifications - V-38540
+-a always,exit -F arch=b64 -S sethostname -S setdomainname -k audit_network_modifications
+-w /etc/issue -p wa -k audit_network_modifications
+-w /etc/issue.net -p wa -k audit_network_modifications
+-w /etc/hosts -p wa -k audit_network_modifications
+-w /etc/sysconfig/network -p wa -k audit_network_modifications
+
+# MAC-policy - V-38541
+-w /etc/selinux/ -p wa -k MAC-policy
+
+# perm_mod - V-38543, V-38545, V-38547, V-38550, V-38552, V-38554, V-38556, V-38557, V-38558, V-38559, V-38561, V-38563, V-38565
+-a always,exit -F arch=b32 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b32 -S chmod -S fchmod -S fchmodat -F auid=0 -k perm_mod
+-a always,exit -F arch=b64 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b64 -S chmod -S fchmod -S fchmodat -F auid=0 -k perm_mod
+-a always,exit -F arch=b32 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b32 -S chown -S fchown -S fchownat -S lchown -F auid=0 -k perm_mod
+-a always,exit -F arch=b64 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b64 -S chown -S fchown -S fchownat -S lchown -F auid=0 -k perm_mod
+-a always,exit -F arch=b32 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b32 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid=0 -k perm_mod
+-a always,exit -F arch=b64 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod
+-a always,exit -F arch=b64 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid=0 -k perm_mod
+
+# access - V-38566
+-a always,exit -F arch=b64 -S creat -S open -S openat -S open_by_handle_at -S truncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access
+-a always,exit -F arch=b64 -S creat -S open -S openat -S open_by_handle_at -S truncate -F exit=-EACCES -F auid=0 -k access
+-a always,exit -F arch=b64 -S creat -S open -S openat -S open_by_handle_at -S truncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access
+-a always,exit -F arch=b64 -S creat -S open -S openat -S open_by_handle_at -S truncate -F exit=-EPERM -F auid=0 -k access
+
+# export - V-38568
+-a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=4294967295 -k export
+-a always,exit -F arch=b64 -S mount -F auid=0 -k export
+
+# delete - V-38575
+-a always,exit -F arch=b64 -S rmdir -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete
+-a always,exit -F arch=b64 -S rmdir -S unlink -S unlinkat -S rename -S renameat -F auid=0 -k delete
+
+# actions - V-38578
+-w /etc/sudoers -p wa -k actions
+
+# modules - V-38580
+-w /sbin/insmod -p x -k modules
+-w /sbin/rmmod -p x -k modules
+-w /sbin/modprobe -p x -k modules
+-a always,exit -F arch=b64 -S init_module -S finit_module -S delete_module -k modules
+
+# tracing, code-injection, data-injection, register-injection
+# Recommended by Red Hat
+-a always,exit -F arch=b64 -S ptrace -k tracing
+-a always,exit -F arch=b64 -S ptrace -F a0=4 -k code-injection
+-a always,exit -F arch=b64 -S ptrace -F a0=5 -k data-injection
+-a always,exit -F arch=b64 -S ptrace -F a0=6 -k register-injection
+
+# power-abuse
+# Recommended by Red Hat
+-a always,exit -F dir=/home -F uid=0 -F auid>=1000 -F auid!=4294967295 -C auid!=obj_uid -F key=power-abuse
+
+# container-create, container-config
+# Recommended by Red Hat
+-a always,exit -F arch=b64 -S clone -F a0&2080505856 -k container-create
+-a always,exit -F arch=b64 -S setns -S unshare -k container-config
+
+# privileged - V-38567
+# Use the comand: "find /bin -type f -perm -04000 2>/dev/null" to determine the applicable commands and create an audit based on the line below
+# -a always,exit -F path=[PROGRAM_PATH] -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
