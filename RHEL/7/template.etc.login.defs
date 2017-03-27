@@ -1,0 +1,77 @@
+##############################################################################
+#
+# /etc/login.defs
+#   chown root:root
+#   chmod 644
+#
+# The RHEL 6 Settings were interpreted for equivalent settings within RHEL 7,
+# and derived from the following:
+#   Red Hat Enterprise Linux 6 Security Technical Implementation Guide
+#   Version 1, Release 13, dated 18 Oct 2016
+#
+################################################################################
+
+# RHEL-06-000050	V-38475
+# The system must require passwords to contain a minimum of 15 characters. 
+PASS_MIN_LEN	15
+
+# RHEL-06-000051	V-38477
+# Users must not be able to change passwords more than once every 24 hours.
+PASS_MIN_DAYS	1
+
+# RHEL-06-000053	V-38479
+# User passwords must be changed at least every 60 days.
+PASS_MAX_DAYS	60
+
+# RHEL-06-000054	V-38480
+# Users must be warned 7 days in advance of password expiration.
+PASS_WARN_AGE	7
+
+# RHEL-06-000063	V-38576
+# The system must use a FIPS 140-2 approved cryptographic hashing algorithm 
+# for generating account password hashes (login.defs).
+ENCRYPT_METHOD	SHA512 
+
+# RHEL-06-000345	V-38645
+# The system default umask in /etc/login.defs must be 077.
+UMASK           077
+
+################################################################################
+# Non-STIG specific configuration
+################################################################################
+
+# *REQUIRED*
+#   Directory where mailboxes reside, _or_ name of file, relative to the
+#   home directory.  If you _do_ define both, MAIL_DIR takes precedence.
+#   QMAIL_DIR is for Qmail
+#
+#QMAIL_DIR	Maildir
+MAIL_DIR	/var/mail
+#MAIL_FILE	.mail
+
+# Define Min/max values for automatic uid selection in useradd
+UID_MIN		1000
+UID_MAX		60000
+# System accounts
+SYS_UID_MIN	201
+SYS_UID_MAX	999
+
+# Define Min/max values for automatic gid selection in groupadd
+GID_MIN		1000
+GID_MAX		60000
+# System accounts
+SYS_GID_MIN	201
+SYS_GID_MAX	999
+
+# Enable 'useradd' to create home directories by default
+CREATE_HOME	yes
+
+# Enable 'userdel' to remove user groups if no members exist
+USERGROUPS_ENAB	yes
+
+# Disable MD5 for password encryption
+MD5_CRYPT_ENAB	no
+
+################################################################################
+# End of File
+################################################################################
