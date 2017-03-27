@@ -1,0 +1,65 @@
+###############################################################################
+#
+# /etc/pam.d/system-auth-local
+#   chown root:root
+#   chmod 644
+#
+# This files is designed to be symbolically linked to cover the following
+# configuration files:
+# 	/etc/pam.d/system-auth
+# 	/etc/pam.d/password-auth
+#
+# The RHEL 6 Settings were interpreted for equivalent settings within RHEL 7,
+# and derived from the following:
+#   Red Hat Enterprise Linux 6 Security Technical Implementation Guide
+#   Version 1, Release 13, dated 18 Oct 2016
+#
+################################################################################
+#
+# Relevant STIG items corrected:
+# 	RHEL-06-000030	V-38497
+# 	RHEL-06-000061	V-38573
+# 	RHEL-06-000062	V-38574
+# 	RHEL-06-000274	V-38658
+# 	RHEL-06-000356	V-38592
+# 	RHEL-06-000357	V-38501
+# 	RHEL-06-000372	V-51875
+#
+################################################################################
+
+#Category	Control						Module			Options
+#########	#######						######			#######
+auth		required					pam_env.so
+auth		required					pam_faillock.so		preauth audit silent deny=3 unlock_time=604800 fail_interval=900
+auth		sufficient					pam_unix.so		try_first_pass
+auth		requisite					pam_succeed_if.so	uid >= 1000 quiet
+auth		sufficient					pam_sss.so		use_first_pass
+auth		[default=die]					pam_faillock.so		authfail audit deny=3 unlock_time=604800 fail_interval=900
+auth		sufficient					pam_faillock.so		authsucc audit deny=3 unlock_time=604800 fail_interval=900
+auth		[success=1 default=bad]				pam_unix.so
+auth		required					pam_deny.so
+
+account		required					pam_faillock.so
+account		required					pam_unix.so		broken_shadow
+account		sufficient					pam_localuser.so
+account		sufficient					pam_succeed_if.so	uid < 1000 quiet
+account		[default=bad success=ok user_unknown=ignore]	pam_sss.so
+account		required					pam_permit.so
+
+password	required					pam_cracklib.so		try_first_pass retry=3 type=
+password	sufficient					pam_unix.so		sha512 shadow try_first_pass use_authtok remember=5
+password	sufficient					pam_pwhistory.so	remember=5
+password	sufficient					pam_sss.so		use_authtok
+password	required					pam_deny.so
+
+session         optional                                        pam_keyinit.so          revoke
+session         required                                        pam_limits.so
+session         required                                        pam_lastlog.so          showfailed
+session         [success=1 default=ignore]                      pam_succeed_if.so       service in crond quiet use_uid
+session         required                                        pam_unix.so
+session         optional                                        pam_sss.so
+-session        optional                                        pam_systemd.so
+
+################################################################################
+# End of Template
+################################################################################
