@@ -60,7 +60,7 @@ rhel_7_firewall_config ()
 FW_TMPL_DIR=${BASE_DIR}/7
 FW_SVC_DIR=/etc/firewalld/services
 FW_ICMP_DIR=/etc/firewalld/icmptypes
-SERVICE_TEMPLATES="firewalld_file.Actifio-Backup-Client.xml firewalld_file.Identity-Management.xml firewalld_file.NetBackup-Client.xml firewalld_file.Oracle-Applications.xml firewalld_file.Oracle-Database.xml firewalld_file.SNMP.xml firewalld_file.TSM-Backup-Client.xml firewalld_file.XRDP.xml"
+SERVICE_TEMPLATES="firewalld_file.Actifio-Backup-Client.xml firewalld_file.Identity-Management.xml firewalld_file.NetBackup-Client.xml firewalld_file.Oracle-Applications.xml firewalld_file.Oracle-Database.xml firewalld_file.RPC-mountd.xml firewalld_file.SNMP.xml firewalld_file.TSM-Backup-Client.xml firewalld_file.XRDP.xml"
 ICMP_TEMPLATES="firewalld_file.timestamp-reply.xml firewalld_file.timestamp-request.xml"
 
 # Verify the Service Templates exists
@@ -91,75 +91,75 @@ printf "===== RHEL 7 - Firewalld configurations =====\n\n"
 # Add New Services
 printf "\n"
 printf "+ Creating New Example Services\n"
-firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-Actifio-Backup-Client
-firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-Identity-Management
-firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-NetBackup-Client
-firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-Oracle-Applications
-firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-Oracle-Database
-firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-RPC-mountd
-firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-SNMP
-firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-TSM-Backup-Client
-firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-XRDP
+/bin/firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-Actifio-Backup-Client
+/bin/firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-Identity-Management
+/bin/firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-NetBackup-Client
+/bin/firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-Oracle-Applications
+/bin/firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-Oracle-Database
+/bin/firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-RPC-mountd
+/bin/firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-SNMP
+/bin/firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-TSM-Backup-Client
+/bin/firewall-cmd --permanent --new-service=${ORG_SHORTNAME}-XRDP
 
 # Add New ICMP Types
 printf "+ Creating New ICMP types\n"
-firewall-cmd --permanent --new-icmptype=timestamp-reply
-firewall-cmd --permanent --new-icmptype=timestamp-request
+/bin/firewall-cmd --permanent --new-icmptype=timestamp-reply
+/bin/firewall-cmd --permanent --new-icmptype=timestamp-request
 
 # Add New Zone
 printf "+ Creating new Zone based on Organization\n"
-firewall-cmd --permanent --new-zone=${ORG_SHORTNAME}
+/bin/firewall-cmd --permanent --new-zone=${ORG_SHORTNAME}
 
 # Configure New Zone to Drop
 printf "+ Setting default target of new Zone to DROP\n"
-firewall-cmd --permanent --zone=${ORG_SHORTNAME} --set-target=DROP
+/bin/firewall-cmd --permanent --zone=${ORG_SHORTNAME} --set-target=DROP
 
 # Copy Service Templates
 printf "+ Copying Templates for Example Services\n"
 for CUR_TEMPLATE in ${SERVICE_TEMPLATES};do
   SERVICE_XML=`echo ${CUR_TEMPLATE} | sed "s/firewalld_file\./${ORG_SHORTNAME}-/"`
-  cp -f ${FW_TMPL_DIR}/${CUR_TEMPLATE} ${FW_SVC_DIR}/${SERVICE_XML}
+  /bin/cp -f ${FW_TMPL_DIR}/${CUR_TEMPLATE} ${FW_SVC_DIR}/${SERVICE_XML}
 done
 
 # Copy ICMP Templates
 printf "+ Copying Templates for Example ICMP types\n"
 for CUR_TEMPLATE in ${ICMP_TEMPLATES};do
   ICMP_XML=`echo ${CUR_TEMPLATE} | sed "s/firewalld_file\.//"`
-  cp -f ${FW_TMPL_DIR}/${CUR_TEMPLATE} ${FW_ICMP_DIR}/${ICMP_XML}
+  /bin/cp -f ${FW_TMPL_DIR}/${CUR_TEMPLATE} ${FW_ICMP_DIR}/${ICMP_XML}
 done
 
 # Reload firewall to apply configuration changes
 printf "+ Reloading the Firewall to update settings\n"
-firewall-cmd --reload
+/bin/firewall-cmd --reload
 
 # Set default Zone
 printf "+ Setting the default zone to ${ORG_SHORTNAME}\n"
-firewall-cmd --set-default-zone=${ORG_SHORTNAME}
+/bin/firewall-cmd --set-default-zone=${ORG_SHORTNAME}
 
 # Add required default Firewall Rules
 printf "+ Enabling SSH connections through the firewall\n"
-firewall-cmd --permanent --zone=${ORG_SHORTNAME} --add-service=ssh
+/bin/firewall-cmd --permanent --zone=${ORG_SHORTNAME} --add-service=ssh
 
 # Add required icmptypes
 printf "+ Configuring  SSH connections through the firewall\n"
-firewall-cmd --permanent --zone=${ORG_SHORTNAME} --add-icmp-block=timestamp-reply
-firewall-cmd --permanent --zone=${ORG_SHORTNAME} --add-icmp-block=timestamp-request
+/bin/firewall-cmd --permanent --zone=${ORG_SHORTNAME} --add-icmp-block=timestamp-reply
+/bin/firewall-cmd --permanent --zone=${ORG_SHORTNAME} --add-icmp-block=timestamp-request
 
 # Allow in ICMP
 printf "+ Enabling ICMP requests for your designated subnet\n"
 if [[ ${FW_ICMP_SUBNET} == "fw_icmp_subnet" ]];then
   printf "\n\e[0;33mNOTICE:\e[0m\tThe Firewall Subnet is not set - ICMP requests must be configured manually.\n\n"
 else
-  firewall-cmd --permanent --direct --add-rule ipv4 filter INPUT 0 -p icmp -s ${FW_ICMP_SUBNET} -j ACCEPT
+  /bin/firewall-cmd --permanent --direct --add-rule ipv4 filter INPUT 0 -p icmp -s ${FW_ICMP_SUBNET} -j ACCEPT
 fi
 
 # Add Rich Rules
 printf "+ Configuring the firewall for rate limiting\n"
-firewall-cmd --permanent --zone=${ORG_SHORTNAME} --add-rich-rule='rule family="ipv4" source address="0.0.0.0/0" destination address="0.0.0.0/0" protocol value="tcp" accept limit value="25/m"'
+/bin/firewall-cmd --permanent --zone=${ORG_SHORTNAME} --add-rich-rule='rule family="ipv4" source address="0.0.0.0/0" destination address="0.0.0.0/0" protocol value="tcp" accept limit value="25/m"'
 
 # Reload firewall to apply configuration changes
 printf "+ Reloading the firewall to activate changes\n"
-firewall-cmd --reload
+/bin/firewall-cmd --reload
 
 # Report Completion
 printf "\n"
