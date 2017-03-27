@@ -96,25 +96,25 @@ fi
 printf "+ Backing up old configurations now\n"
 
 if [[ -f ${BACKUP_DIR}/etc.audit.rules.d.audit.rules.${CUR_DATE} ]];then
-  cp ${AUDIT_RULES} ${BACKUP_DIR}/etc.audit.rules.d.audit.rules.${CUR_DATE}.${CUR_TIME}
+  /bin/cp ${AUDIT_RULES} ${BACKUP_DIR}/etc.audit.rules.d.audit.rules.${CUR_DATE}.${CUR_TIME}
 else
-  cp ${AUDIT_RULES} ${BACKUP_DIR}/etc.audit.rules.d.audit.rules.${CUR_DATE}
+  /bin/cp ${AUDIT_RULES} ${BACKUP_DIR}/etc.audit.rules.d.audit.rules.${CUR_DATE}
 fi
 
 # Replace the existing configurations
 printf "+ Replacing base configurations\n"
-cat ${RULES_TEMPLATE} > ${AUDIT_RULES}
+/bin/cat ${RULES_TEMPLATE} > ${AUDIT_RULES}
 
 # Set permissions
 printf "+ Updating Permissions\n"
-chown root:root ${AUDIT_RULES}
+/bin/chown root:root ${AUDIT_RULES}
 chmod 600 ${AUDIT_RULES}
 
 # Determining Local Disks and creating
 printf "+ Finding and generating audits for setuid and setgid files\n"
-LOCAL_DISKS=`lsblk -o MOUNTPOINT | egrep -v '^$|^MOUNTPOINT|^\[SWAP\]' | sort`
+LOCAL_DISKS=`/bin/lsblk -o MOUNTPOINT | egrep -v '^$|^MOUNTPOINT|^\[SWAP\]' | sort`
 for CUR_DISK in ${LOCAL_DISKS};do
-  for CUR_FILE in `find ${CUR_DISK} -xdev -type f -perm /6000 2>/dev/null`;do
+  for CUR_FILE in `/bin/find ${CUR_DISK} -xdev -type f -perm /6000 2>/dev/null`;do
     if [[ -f ${CUR_FILE} ]];then
       echo -e "-a always,exit -F path=${CUR_FILE} -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged" >> ${AUDIT_RULES}
     else
