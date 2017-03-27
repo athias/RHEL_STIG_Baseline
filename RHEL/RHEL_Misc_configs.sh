@@ -10,20 +10,20 @@
 ################################################################################
 #
 # This script will correct the following STIG Items:
-#	RHEL-06-000027	V-######
-#	RHEL-06-000069	V-######
-#	RHEL-06-000070	V-######
-#	RHEL-06-000272	V-######
-#	RHEL-06-000308	V-######
-#	RHEL-06-000319	V-######
-#	RHEL-06-000334	V-######
-#	RHEL-06-000340	V-######
-#	RHEL-06-000509	V-######
-#	RHEL-06-000290	V-######
-#	RHEL-06-000286	V-######
+#	RHEL-06-000027	V-38492
+#	RHEL-06-000069	V-38586
+#	RHEL-06-000070	V-38588
+#	RHEL-06-000272	V-38656
+#	RHEL-06-000308	V-38675
+#	RHEL-06-000319	V-38684
+#	RHEL-06-000334	V-38692
+#	RHEL-06-000340	V-38660
+#	RHEL-06-000509	V-38471
+#	RHEL-06-000290	V-38674
+#	RHEL-06-000286	V-38668
 #
 # This script will perform some correction for the following:
-#	RHEL-06-000135	V-######
+#	RHEL-06-000135	V-38623
 #
 ################################################################################
 # Environment Variable
@@ -69,58 +69,58 @@ printf "+ Backing up old configurations now\n"
 
 # /etc/securetty
 if [[ -f ${BACKUP_DIR}/etc.securetty.${CUR_DATE} ]];then
-  cp /etc/securetty ${BACKUP_DIR}/etc.securetty.${CUR_DATE}.${CUR_TIME}
+  /bin/cp /etc/securetty ${BACKUP_DIR}/etc.securetty.${CUR_DATE}.${CUR_TIME}
 else
-  cp /etc/securetty ${BACKUP_DIR}/etc.securetty.${CUR_DATE}
+  /bin/cp /etc/securetty ${BACKUP_DIR}/etc.securetty.${CUR_DATE}
 fi
 
 # /etc/sysconfig/init
 if [[ -f ${BACKUP_DIR}/etc.sysconfig.init.${CUR_DATE} ]];then
-  cp /etc/sysconfig/init ${BACKUP_DIR}/etc.sysconfig.init.${CUR_DATE}.${CUR_TIME}
+  /bin/cp /etc/sysconfig/init ${BACKUP_DIR}/etc.sysconfig.init.${CUR_DATE}.${CUR_TIME}
 else
-  cp /etc/sysconfig/init ${BACKUP_DIR}/etc.sysconfig.init.${CUR_DATE}
+  /bin/cp /etc/sysconfig/init ${BACKUP_DIR}/etc.sysconfig.init.${CUR_DATE}
 fi
 
 # /etc/samba/smb.conf
 if [[ -f ${BACKUP_DIR}/etc.samba.smb.conf.${CUR_DATE} ]];then
-  cp /etc/samba/smb.conf ${BACKUP_DIR}/etc.samba.smb.conf.${CUR_DATE}.${CUR_TIME}
+  /bin/cp /etc/samba/smb.conf ${BACKUP_DIR}/etc.samba.smb.conf.${CUR_DATE}.${CUR_TIME}
 else
-  cp /etc/samba/smb.conf ${BACKUP_DIR}/etc.samba.smb.conf.${CUR_DATE}
+  /bin/cp /etc/samba/smb.conf ${BACKUP_DIR}/etc.samba.smb.conf.${CUR_DATE}
 fi
 
 # /etc/security/limits.conf
 if [[ -f ${BACKUP_DIR}/etc.security.limits.conf.${CUR_DATE} ]];then
-  cp /etc/security/limits.conf ${BACKUP_DIR}/etc.security.limits.conf.${CUR_DATE}.${CUR_TIME}
+  /bin/cp /etc/security/limits.conf ${BACKUP_DIR}/etc.security.limits.conf.${CUR_DATE}.${CUR_TIME}
 else
-  cp /etc/security/limits.conf ${BACKUP_DIR}/etc.security.limits.conf.${CUR_DATE}
+  /bin/cp /etc/security/limits.conf ${BACKUP_DIR}/etc.security.limits.conf.${CUR_DATE}
 fi
 
 # /etc/default/useradd
 if [[ -f ${BACKUP_DIR}/etc.default.useradd.${CUR_DATE} ]];then
-  cp /etc/default/useradd ${BACKUP_DIR}/etc.default.useradd.${CUR_DATE}.${CUR_TIME}
+  /bin/cp /etc/default/useradd ${BACKUP_DIR}/etc.default.useradd.${CUR_DATE}.${CUR_TIME}
 else
-  cp /etc/default/useradd ${BACKUP_DIR}/etc.default.useradd.${CUR_DATE}
+  /bin/cp /etc/default/useradd ${BACKUP_DIR}/etc.default.useradd.${CUR_DATE}
 fi
 
 # /etc/snmp/snmpd.conf
 if [[ -f ${BACKUP_DIR}/etc.snmp.snmpd.conf.${CUR_DATE} ]];then
-  cp /etc/snmp/snmpd.conf ${BACKUP_DIR}/etc.snmp.snmpd.conf.${CUR_DATE}.${CUR_TIME}
+  /bin/cp /etc/snmp/snmpd.conf ${BACKUP_DIR}/etc.snmp.snmpd.conf.${CUR_DATE}.${CUR_TIME}
 else
-  cp /etc/snmp/snmpd.conf ${BACKUP_DIR}/etc.snmp.snmpd.conf.${CUR_DATE}
+  /bin/cp /etc/snmp/snmpd.conf ${BACKUP_DIR}/etc.snmp.snmpd.conf.${CUR_DATE}
 fi
 
 # /etc/audisp/plugins.d/syslog.conf
 if [[ -f ${BACKUP_DIR}/etc.audisp.plugins.d.syslog.conf.${CUR_DATE} ]];then
-  cp /etc/audisp/plugins.d/syslog.conf ${BACKUP_DIR}/etc.audisp.plugins.d.syslog.conf.${CUR_DATE}.${CUR_TIME}
+  /bin/cp /etc/audisp/plugins.d/syslog.conf ${BACKUP_DIR}/etc.audisp.plugins.d.syslog.conf.${CUR_DATE}.${CUR_TIME}
 else
-  cp /etc/audisp/plugins.d/syslog.conf ${BACKUP_DIR}/etc.audisp.plugins.d.syslog.conf.${CUR_DATE}
+  /bin/cp /etc/audisp/plugins.d/syslog.conf ${BACKUP_DIR}/etc.audisp.plugins.d.syslog.conf.${CUR_DATE}
 fi
 
 # /etc/rc.d/rc.local
 if [[ -f ${BACKUP_DIR}/etc.rc.d.rc.local.${CUR_DATE} ]];then
-  cp /etc/rc.d/rc.local ${BACKUP_DIR}/etc.rc.d.rc.local.${CUR_DATE}.${CUR_TIME}
+  /bin/cp /etc/rc.d/rc.local ${BACKUP_DIR}/etc.rc.d.rc.local.${CUR_DATE}.${CUR_TIME}
 else
-  cp /etc/rc.d/rc.local ${BACKUP_DIR}/etc.rc.d.rc.local.${CUR_DATE}
+  /bin/cp /etc/rc.d/rc.local ${BACKUP_DIR}/etc.rc.d.rc.local.${CUR_DATE}
 fi
 
 # SeLinux Context tags
@@ -130,18 +130,18 @@ printf "+ Configuring Selinux Tags\n"
 if [[ ${ADMIN_HOMEDIR} == "admin_homedir" ]];then
   printf "\n\e[0;33mNOTICE:\e[0m\tThe Admin home directory is not set.  Some selinux tags will not be set.\n\n"
 elif [[ -n `echo ${ADMIN_HOMEDIR} | grep '^/local_home'` ]];then
-  semanage fcontext -a -t home_root_t '/local_home'
-  semanage fcontext -a -t user_home_dir_t "${ADMIN_HOMEDIR}"
-  semanage fcontext -a -t user_home_t "${ADMIN_HOMEDIR}/\.bash_history"
-  semanage fcontext -a -t user_home_t "${ADMIN_HOMEDIR}/\.bash_logout"
-  semanage fcontext -a -t user_home_t "${ADMIN_HOMEDIR}/\.bash_profile"
-  semanage fcontext -a -t user_home_t "${ADMIN_HOMEDIR}/\.bashrc"
-  restorecon -RFvv /local_home
+  /sbin/semanage fcontext -a -t home_root_t '/local_home'
+  /sbin/semanage fcontext -a -t user_home_dir_t "${ADMIN_HOMEDIR}"
+  /sbin/semanage fcontext -a -t user_home_t "${ADMIN_HOMEDIR}/\.bash_history"
+  /sbin/semanage fcontext -a -t user_home_t "${ADMIN_HOMEDIR}/\.bash_logout"
+  /sbin/semanage fcontext -a -t user_home_t "${ADMIN_HOMEDIR}/\.bash_profile"
+  /sbin/semanage fcontext -a -t user_home_t "${ADMIN_HOMEDIR}/\.bashrc"
+  /sbin/restorecon -RFvv /local_home
 else
   printf "\n\e[0;33mNOTICE:\e[0m\tThe Admin home directory is not based under \'/local_home\'.  Some selinux tags will not be set.\n\n"
 fi
 
-setsebool -P use_nfs_home_dirs 1
+/sbin/setsebool -P use_nfs_home_dirs 1
 
 # Correcting RHEL-06-000027
 printf "+ Correcting RHEL-06-000027\n"
@@ -203,7 +203,7 @@ printf "+ Correcting RHEL-06-000340\n"
 sed -i '/com2sec\ /d' /etc/snmp/snmpd.conf
 sed -i '/^group.*\ v1\ /d' /etc/snmp/snmpd.conf
 sed -i '/^group.*\ v2c\ /d' /etc/snmp/snmpd.conf
-service snmpd restart
+/sbin/service snmpd restart
 
 # Correcting RHEL-06-000509
 printf "+ Correcting RHEL-06-000509\n"
@@ -220,17 +220,17 @@ if [[ -n `cat /etc/rc.d/rc.local | grep "chmod 0600 /var/log/boot.log"` ]];then
 else
   echo "chmod 0600 /var/log/boot.log" >> /etc/rc.d/rc.local 
   chmod u+x /etc/rc.d/rc.local 
-  chown root:root /var/log/boot.log
+  /bin/chown root:root /var/log/boot.log
   chmod 0600 /var/log/boot.log
 fi
 
 # Correcting RHEL-06-000290
 printf "+ Correcting RHEL-06-000290\n"
-  systemctl set-default multi-user.target 
+  /bin/systemctl set-default multi-user.target 
 
 # Correcting RHEL-06-000286
 printf "+ Correcting RHEL-06-000286\n"
-  systemctl mask ctrl-alt-del.target
+  /bin/systemctl mask ctrl-alt-del.target
 
 # Report Completion
 printf "\n"
