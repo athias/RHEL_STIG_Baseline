@@ -76,7 +76,7 @@ rhel_7_system_auth_config ()
 LOGIN_DEFS=/etc/login.defs
 LOGIN_TEMPLATE=${BASE_DIR}/7/template.etc.login.defs
 PWQUALITY_CONF=/etc/security/pwquality.conf
-PWQUALITY_TEMPLATE=${BASE_DIR}/7/template.etc.pwquality.conf
+PWQUALITY_TEMPLATE=${BASE_DIR}/7/template.etc.security.pwquality.conf
 SYSTEM_AUTH=/etc/pam.d/system-auth
 PASSWORD_AUTH=/etc/pam.d/password-auth
 SYS_AUTH_LOCAL=/etc/pam.d/system-auth-local
@@ -84,7 +84,7 @@ SYS_AUTH_TEMPLATE=${BASE_DIR}/7/template.etc.pam.d.system.auth.local
 
 # Verify the template files exists
 if [[ ! -f ${LOGIN_TEMPLATE} ]] || [[ ! -f ${PWQUALITY_TEMPLATE} ]] || [[ ! -f ${SYS_AUTH_TEMPLATE} ]];then
-  printf "\n\n\e[0;31mERROR:\e[0m\tThe template file is not accessible - aborting\n\n"
+  printf "\n\n\e[0;31mERROR:\e[0m\tThe template files are not accessible - aborting\n\n"
   end_script
 fi
 
