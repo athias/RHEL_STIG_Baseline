@@ -13,12 +13,12 @@
 #
 # This script will correct the following STIG Items:
 #  /etc/login.defs
-#	      RHEL-06-000050  V-38475
-#	      RHEL-06-000051  V-38477
-#	      RHEL-06-000053  V-38479
-#	      RHEL-06-000054  V-38480
+#	RHEL-06-000050  V-38475
+#	RHEL-06-000051  V-38477
+#	RHEL-06-000053  V-38479
+#	RHEL-06-000054  V-38480
 #       RHEL-06-000063  V-38576
-#	      RHEL-06-000345  V-38645
+#	RHEL-06-000345  V-38645
 #  /etc/pwquality.conf
 #       RHEL-06-000050	V-38475
 #       RHEL-06-000056  V-38482
