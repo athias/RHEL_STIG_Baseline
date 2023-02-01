@@ -1,3 +1,7 @@
+# UPDATE
+
+This REPO is being archived.  This has not been updated in several years, and it is not likely to receive any updates.  The Archive is in case some of the code may be useful to someone in the future.
+
 # RHEL_STIG_Baseline
 
 Welcome to the Red Hat Enterprise Linux (RHEL) Secure Technical Implementation
